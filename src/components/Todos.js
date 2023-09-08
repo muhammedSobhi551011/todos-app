@@ -4,20 +4,9 @@ import { useTodos } from "../contexts/TodosContext";
 import TodoProvider from "../contexts/TodoContext";
 
 function Todos() {
-  const { todos, todosType } = useTodos();
-  const doneTodos = todos.filter((todo) => {
-    return todo.isDone;
-  });
-  const notDoneTodos = todos.filter((todo) => {
-    return !todo.isDone;
-  });
-  const currentTodos = todosType.all
-    ? todos
-    : todosType.done
-    ? doneTodos
-    : notDoneTodos;
+  const { currentTodos} = useTodos();
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={2} maxHeight={300} overflow={"auto"} padding={2}>
       {currentTodos.map((todo) => {
         return (
           <TodoProvider key={todo.id} sTodo={todo}>

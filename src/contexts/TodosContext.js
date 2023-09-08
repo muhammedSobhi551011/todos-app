@@ -1,16 +1,20 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import uuid4 from "uuid4";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useMemo,
+  useReducer,
+} from "react";
 import MyDialog from "../components/MyDialog";
 import MySnackbar from "../components/MySnackbar";
+import TodosReducer from "../reducers/TodosReducer";
 
 const todosContext = createContext([]);
 export default function TodosProvider({ children }) {
   // STATES
-  const [todos, setTodos] = useState(
-    JSON.parse(localStorage.getItem("todos"))
-      ? JSON.parse(localStorage.getItem("todos"))
-      : []
-  );
+  const [todos, todosDispatch] = useReducer(TodosReducer, []);
+
   const [newTitle, setNewTitle] = useState("");
   const [myDialog, setMyDialog] = useState({
     title: "",
@@ -24,33 +28,42 @@ export default function TodosProvider({ children }) {
     content: { isContent: false, text: "" },
   });
   const [todosType, setTodosType] = useState({ all: true, done: false });
-  const [snackbar, setSnackbar] = useState({open:false, text:''});
+  const [snackbar, setSnackbar] = useState({ open: false, text: "" });
 
   useEffect(() => {
     localStorage.setItem("todos", JSON.stringify(todos));
   }, [todos]);
+  useMemo(()=>{
+    todosDispatch({ type: "initialTodos" });
+  },[])
+  const doneTodos = useMemo(() => {
+    return todos.filter((todo) => {
+      return todo.isDone;
+    });
+  }, [todos]);
+  const notDoneTodos = useMemo(() => {
+    return todos.filter((todo) => {
+      return !todo.isDone;
+    });
+  }, [todos]);
+
+
+  const currentTodos = todosType.all
+    ? todos
+    : todosType.done
+    ? doneTodos
+    : notDoneTodos;
+
+
 
   //HANDLERS
   const handleAddTodos = () => {
-    setTodos([
-      ...todos,
-      {
-        id: uuid4(),
-        title: newTitle,
-        isDone: false,
-      },
-    ]);
+    todosDispatch({ type: "add", payload: { title: newTitle } });
     setNewTitle("");
     handleShowSnackbar("تمت اضافة مهمة");
   };
   const handleClickEdit = () => {
-    const newTodos = [...todos];
-    for (const todo of newTodos) {
-      if (todo.id === myDialog.inputs.id) {
-        todo.title = myDialog.inputs.textField.text;
-      }
-    }
-    setTodos(newTodos);
+    todosDispatch({ type: "edit", payload: { myDialog: myDialog } });
     setMyDialog({
       ...myDialog,
       open: false,
@@ -58,11 +71,7 @@ export default function TodosProvider({ children }) {
     handleShowSnackbar("تم تعديل المهمة");
   };
   const handleDeleteTodo = () => {
-    setTodos(
-      todos.filter((todo) => {
-        return todo.id !== myDialog.inputs.id;
-      })
-    );
+    todosDispatch({ type: "delete", payload: { myDialog: myDialog } });
     setMyDialog({
       ...myDialog,
       open: false,
@@ -97,16 +106,16 @@ export default function TodosProvider({ children }) {
     });
   };
   const handleHideSnackbar = () => {
-    setSnackbar({...snackbar,open: false});
+    setSnackbar({ ...snackbar, open: false });
   };
   const handleShowSnackbar = (text) => {
-    setSnackbar({open: true, text:text});
+    setSnackbar({ open: true, text: text });
   };
   return (
     <todosContext.Provider
       value={{
         todos,
-        setTodos,
+        todosDispatch,
         handleAddTodos,
         newTitle,
         setNewTitle,
@@ -116,6 +125,7 @@ export default function TodosProvider({ children }) {
         handleClickEdit,
         handleDeleteTodo,
         handleCloseMyDialog,
+        currentTodos,
         todosType,
         handleTabClick,
         snackbar,

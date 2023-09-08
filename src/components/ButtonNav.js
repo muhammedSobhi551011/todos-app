@@ -4,13 +4,14 @@ import { useTodos } from "../contexts/TodosContext";
 
 function ButtonNav() {
   const myTheme = useTheme();
-  const { handleTabClick } = useTodos();
+  const { handleTabClick, todosType } = useTodos();
   return (
     <ButtonGroup
       variant='outlined'
       color='secondary'
       aria-label='outlined primary button group'>
       <Button
+        variant={todosType.all ? "outlined" : todosType.done?"outlined":"contained"}
         value='not-done'
         onClick={(e) => {
           handleTabClick(e.target.value);
@@ -19,6 +20,7 @@ function ButtonNav() {
         غير منجز
       </Button>
       <Button
+        variant={todosType.all ? "outlined" : todosType.done?"contained":"outlined"}
         value='done'
         onClick={(e) => {
           handleTabClick(e.target.value);
@@ -27,6 +29,7 @@ function ButtonNav() {
         منجز
       </Button>
       <Button
+        variant={todosType.all ? "contained" : "outlined"}
         value='all'
         onClick={(e) => {
           handleTabClick(e.target.value);
