@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/static/css/main.cc82d365.css",
+    "main.js": "/static/js/main.39f72d76.js",
+    "static/js/787.e220566b.chunk.js": "/static/js/787.e220566b.chunk.js",
+    "static/media/Marhey-VariableFont_wght.ttf": "/static/media/Marhey-VariableFont_wght.aaa121377babe2d6501e.ttf",
+    "index.html": "/index.html",
+    "main.cc82d365.css.map": "/static/css/main.cc82d365.css.map",
+    "main.39f72d76.js.map": "/static/js/main.39f72d76.js.map",
+    "787.e220566b.chunk.js.map": "/static/js/787.e220566b.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.cc82d365.css",
+    "static/js/main.39f72d76.js"
+  ]
+}
