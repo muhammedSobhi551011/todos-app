@@ -45,8 +45,8 @@ export default function Todo() {
               sx={{
                 color: myTheme.palette.secondary.contrastText,
                 direction: "rtl",
-                textDecoration: sTodo.isDone ? "none" : "line-through",
-                opacity: sTodo.isDone ? 1 : 0.8,
+                textDecoration: sTodo.isDone ? "line-through" : "none",
+                opacity: sTodo.isDone ? 0.8 : 1,
               }}>
               {sTodo.title}
             </Typography>
