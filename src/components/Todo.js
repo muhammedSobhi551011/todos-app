@@ -18,7 +18,11 @@ export default function Todo() {
   const { handleCheckTodo, sTodo , handleMyDialog} = useTodo();
   return (
     <Grid item xs={12}>
-      <Paper elevation={2} sx={{ background: myTheme.palette.secondary.light }}>
+      <Paper
+        elevation={2}
+        sx={{ background: myTheme.palette.secondary.light, transition:"padding 0.35s ease-out", "&:hover": {
+          padding: "4px"
+        }}}>
         <Stack direction='row-reverse' justifyContent='space-between'>
           <Stack direction='row-reverse' alignItems='center'>
             <Checkbox
@@ -40,7 +44,9 @@ export default function Todo() {
             <Typography
               sx={{
                 color: myTheme.palette.secondary.contrastText,
-                direction: "rtl"
+                direction: "rtl",
+                textDecoration: sTodo.isDone ? "none" : "line-through",
+                opacity: sTodo.isDone ? 1 : 0.8,
               }}>
               {sTodo.title}
             </Typography>
